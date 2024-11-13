@@ -1,0 +1,2 @@
+# zapiski-ai-server
+Server
