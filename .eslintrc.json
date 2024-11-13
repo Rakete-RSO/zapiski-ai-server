@@ -1,0 +1,46 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript"
+  ],
+  "rules": {
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          [
+            "builtin",
+            "external"
+          ],
+          "internal",
+          [
+            "parent",
+            "sibling"
+          ],
+          "index"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "sort-imports": [
+      "error",
+      {
+        "ignoreCase": true,
+        "ignoreDeclarationSort": true,
+        "ignoreMemberSort": false
+      }
+    ]
+  }
+}
