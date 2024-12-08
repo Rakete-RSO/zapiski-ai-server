@@ -1,8 +1,7 @@
 # upload.py
 import streamlit as st
 import requests
-
-API_URL = "http://tvoj-api-url"  # Zamenjaj s pravim URL-jem
+from config import API_URL  # Import API_URL from config.py
 
 def upload_notes_page():
     st.title("Naloži zapiske")

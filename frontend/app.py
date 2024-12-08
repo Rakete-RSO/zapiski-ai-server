@@ -5,44 +5,62 @@ from help_pages.registration import register_page
 from help_pages.home import home_page
 from help_pages.upload import upload_notes_page
 
+
+# Function to switch pages
+def navigate_to(page_name):
+    st.session_state["current_page"] = page_name
+
 def main():
-    st.set_page_config(page_title="Aplikacija za zapiske")
+    # Initialize session state for login and navigation
+    if "logged_in" not in st.session_state:
+        st.session_state["logged_in"] = False
+    print("Reruning")
 
-    # Uporabimo session_state za shranjevanje stanja prijave
-    if 'logged_in' not in st.session_state:
-        st.session_state['logged_in'] = False
+    if "current_page" not in st.session_state:
+        st.session_state["current_page"] = "Domov"  # Default page
+        print(st.session_state["current_page"])
 
-    # Navigacija
-    if st.session_state['logged_in']:
-        menu = ["Domov", "Nalaganje zapiskov", "Odjava"]
-    else:
-        menu = ["Domov", "Prijava", "Registracija"]
+    print(st.session_state["current_page"])
+    # Sidebar navigation menu
+    menu = ["Domov", "Prijava", "Registracija"]
 
-    choice = st.sidebar.selectbox("Meni", menu)
+    # Select the menu item
+    selected_menu = st.sidebar.selectbox(
+        "Meni:", menu, index=menu.index(st.session_state["current_page"])
+    )
 
-    if choice == "Domov":
-        home_page()
-    elif choice == "Prijava":
+    if selected_menu != st.session_state["current_page"]:
+        st.session_state["current_page"] = selected_menu
+
+
+    # Render the selected page
+    if st.session_state["current_page"] == "Domov":
+        home_page(navigate_to)
+    elif st.session_state["current_page"] == "Prijava":
         if st.session_state['logged_in']:
             st.warning("Že ste prijavljeni.")
+            home_page(navigate_to)
         else:
-            login_page()
-    elif choice == "Registracija":
+            login_page(navigate_to)
+    elif st.session_state["current_page"] == "Registracija":
         if st.session_state['logged_in']:
             st.warning("Ste že prijavljeni.")
+            home_page(navigate_to)
         else:
-            register_page()
-    elif choice == "Odjava":
+            register_page(navigate_to)
+    elif st.session_state["current_page"] == "Odjava":
         st.session_state['logged_in'] = False
         st.session_state['access_token'] = None
         st.success("Uspešno odjavljeni.")
-        st.experimental_rerun()
-    elif choice == "Nalaganje zapiskov":
+        navigate_to("Domov")
+        home_page(navigate_to)
+    elif st.session_state["current_page"] == "Nalaganje zapiskov":
         if st.session_state['logged_in']:
-            upload_notes_page()
+            upload_notes_page(navigate_to)
         else:
             st.warning("Prosimo, prijavite se za dostop do te strani.")
-            login_page()
+            login_page(navigate_to)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
