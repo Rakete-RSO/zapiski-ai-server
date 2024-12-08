@@ -48,7 +48,7 @@ def register_user(username: str, email: str, password: str, navigate_to):
         if response.status_code in [200, 201]:
             st.success("Uspešno registrirani! Sedaj se lahko prijavite.")
             time.sleep(1)
-            navigate_to()
+            navigate_to("Prijava")
         else:
             error_detail = response.json().get("detail", "Neznana napaka")
             st.error(f"Napaka pri registraciji: {error_detail}")
