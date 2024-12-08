@@ -11,3 +11,5 @@ load_dotenv()
 API_URL = os.getenv(
     "API_URL", "http://127.0.0.1:8000"
 )  # Default to localhost if not setreadme
+
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"

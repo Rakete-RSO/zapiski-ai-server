@@ -1,10 +1,9 @@
 # register.py
 import time
 
-import bcrypt
 import requests
 import streamlit as st
-from config import API_URL  # Import API_URL from config.py
+from config import API_URL, DEVELOPMENT_MODE  # Import API_URL from config.py
 
 
 def validate_password(password: str) -> bool:
@@ -67,10 +66,9 @@ def register_page(navigate_to):
             st.warning("Prosimo, izpolnite vsa polja.")
         elif password != confirm_password:
             st.warning("Gesli se ne ujemata.")
-        elif not validate_password(password):
+        elif not validate_password(password) and not DEVELOPMENT_MODE:
             st.warning(
                 "Geslo mora biti dolgo najmanj 8 znakov ter vsebovati veliko začetnico, malo začetnico, številko in poseben znak."
             )
         else:
             register_user(username, email, password, navigate_to)
-

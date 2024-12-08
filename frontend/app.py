@@ -18,9 +18,7 @@ def main():
 
     if "current_page" not in st.session_state:
         st.session_state["current_page"] = "Domov"  # Default page
-        print(st.session_state["current_page"])
 
-    print(st.session_state["current_page"])
     # Sidebar navigation menu
     menu = ["Domov", "Prijava", "Registracija"]
 
@@ -63,4 +61,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

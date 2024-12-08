@@ -1,8 +1,10 @@
 # zapiski-ai-server
-Server
+
+Frontend
 
 ## Run locally
+
 1. `.\.venv\Scripts\Activate`
-2. Ustvarite frontend/.env datoteko -> `API_URL= http://127.0.0.1:8000` 
+2. `cp frontend/.example.env frontend/.env` (sets base API URL for development)
 3. `cd frontend`
 4. `streamlit run app.py`
