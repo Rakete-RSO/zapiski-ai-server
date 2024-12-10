@@ -1,14 +1,14 @@
-# home.py
 import streamlit as st
 
 
+# NOTE: Trenutno neuporabljen
 def home_page(navigate_to):
     st.title("Dobrodošli na platformi za zapiske")
 
-    if 'logged_in' not in st.session_state:
-        st.session_state['logged_in'] = False
+    if "logged_in" not in st.session_state:
+        st.session_state["logged_in"] = False
 
-    if not st.session_state['logged_in']:
+    if not st.session_state["logged_in"]:
         with st.container(border=True):
             st.subheader("Za uporabo naše platforme se prosimo prijavite.")
             # Add buttons (center-aligned)
@@ -22,7 +22,9 @@ def home_page(navigate_to):
                 if st.button("🔐 Prijava", use_container_width=True):
                     navigate_to("Prijava")
     else:
-        st.write("Tukaj lahko nalagate slike svojih zapiskov in jih pretvorite v bolje berljivo obliko.")
+        st.write(
+            "Tukaj lahko nalagate slike svojih zapiskov in jih pretvorite v bolje berljivo obliko."
+        )
         st.write("Uporabite meni na levi za navigacijo po aplikaciji.")
 
         uploaded_file = st.file_uploader(
@@ -35,7 +37,9 @@ def home_page(navigate_to):
 
             # Show the image or process the file
             if uploaded_file.type in ["image/jpeg", "image/png"]:
-                st.image(uploaded_file, caption="Naložena slika", use_container_width=True)
+                st.image(
+                    uploaded_file, caption="Naložena slika", use_container_width=True
+                )
             elif uploaded_file.type == "application/pdf":
                 st.write("Prikazovanje PDF datotek ni neposredno podprto.")
                 st.download_button(
@@ -44,3 +48,4 @@ def home_page(navigate_to):
                     file_name=uploaded_file.name,
                     mime="application/pdf",
                 )
+

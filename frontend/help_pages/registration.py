@@ -1,9 +1,8 @@
-# register.py
 import time
 
 import requests
 import streamlit as st
-from config import API_URL, DEVELOPMENT_MODE  # Import API_URL from config.py
+from config import AUTH_BASE_URL, DEVELOPMENT_MODE
 
 
 def validate_password(password: str) -> bool:
@@ -39,7 +38,7 @@ def register_user(username: str, email: str, password: str, navigate_to):
 
     try:
         # Send the POST request to the authentication server
-        response = requests.post(f"{API_URL}/register", json=data)
+        response = requests.post(f"{AUTH_BASE_URL}/register", json=data)
 
         # Handle the response
         if response.status_code in [200, 201]:

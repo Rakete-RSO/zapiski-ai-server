@@ -1,10 +1,8 @@
-# login.py
 import time
 
-import bcrypt
 import requests
 import streamlit as st
-from config import API_URL  # Import API_URL from config.py
+from config import AUTH_BASE_URL
 
 
 def login_user(username: str, password: str) -> None:
@@ -19,7 +17,7 @@ def login_user(username: str, password: str) -> None:
 
     try:
         # Send a POST request to the authentication server
-        response = requests.post(f"{API_URL}/login", json=data)
+        response = requests.post(f"{AUTH_BASE_URL}/login", json=data)
         # Handle the response
         if response.status_code == 200:
             # Extract the access token and update session state
@@ -49,4 +47,3 @@ def login_page(navigate_to):
 
     if st.button("Prijava"):
         login_user(username, password)
-
