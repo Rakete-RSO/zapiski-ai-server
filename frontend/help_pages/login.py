@@ -1,10 +1,8 @@
-# login.py
 import time
 
-import streamlit as st
 import requests
-import bcrypt
-from config import API_URL  # Import API_URL from config.py
+import streamlit as st
+from config import AUTH_BASE_URL
 
 
 def login_user(username: str, password: str) -> None:
@@ -15,21 +13,18 @@ def login_user(username: str, password: str) -> None:
         return
 
     # Create the request payload
-    data = {"username": username, "email": username,"password": password}
+    data = {"username": username, "email": username, "password": password}
 
     try:
         # Send a POST request to the authentication server
-        print("Trying to login...")
-        response = requests.post(f"{API_URL}/login", json=data)
-        print("Response")
-        print(response)
+        response = requests.post(f"{AUTH_BASE_URL}/login", json=data)
         # Handle the response
         if response.status_code == 200:
             # Extract the access token and update session state
             access_token = response.json().get("access_token")
             if access_token:
-                st.session_state['access_token'] = access_token
-                st.session_state['logged_in'] = True
+                st.session_state["access_token"] = access_token
+                st.session_state["logged_in"] = True
                 st.success("Uspešno prijavljeni!")
                 time.sleep(1)
                 st.rerun()
@@ -40,6 +35,7 @@ def login_user(username: str, password: str) -> None:
     except requests.exceptions.RequestException as e:
         # Handle any exceptions during the request
         st.error(f"Napaka pri povezovanju s strežnikom: {str(e)}")
+
 
 def login_page(navigate_to):
     """Renders the login page."""

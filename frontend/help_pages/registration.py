@@ -1,11 +1,8 @@
-# register.py
 import time
 
-import streamlit as st
 import requests
-import bcrypt
-from config import API_URL  # Import API_URL from config.py
-
+import streamlit as st
+from config import AUTH_BASE_URL, DEVELOPMENT_MODE
 
 
 def validate_password(password: str) -> bool:
@@ -26,6 +23,7 @@ def validate_password(password: str) -> bool:
         return False
     return True
 
+
 def register_user(username: str, email: str, password: str, navigate_to):
     """
     Handle the registration process by sending a POST request to the auth server.
@@ -40,9 +38,7 @@ def register_user(username: str, email: str, password: str, navigate_to):
 
     try:
         # Send the POST request to the authentication server
-        print("sending POST request")
-        response = requests.post(f"{API_URL}/register", json=data)
-        print("POST response")
+        response = requests.post(f"{AUTH_BASE_URL}/register", json=data)
 
         # Handle the response
         if response.status_code in [200, 201]:
@@ -65,12 +61,11 @@ def register_page(navigate_to):
         confirm_password = st.text_input("Potrdi geslo", type="password")
 
     if st.button("Registracija"):
-        print("whatever")
         if username == "" or email == "" or password == "" or confirm_password == "":
             st.warning("Prosimo, izpolnite vsa polja.")
         elif password != confirm_password:
             st.warning("Gesli se ne ujemata.")
-        elif not validate_password(password):
+        elif not validate_password(password) and not DEVELOPMENT_MODE:
             st.warning(
                 "Geslo mora biti dolgo najmanj 8 znakov ter vsebovati veliko začetnico, malo začetnico, številko in poseben znak."
             )
