@@ -5,7 +5,7 @@ import streamlit as st
 from config import AUTH_BASE_URL
 
 
-def login_user(username: str, password: str) -> None:
+def login_user(username: str, password: str, cookie_controller) -> None:
     """Handles the login process by sending a request to the auth server."""
     # Check if fields are empty
     if username == "" or password == "":
@@ -24,6 +24,7 @@ def login_user(username: str, password: str) -> None:
             access_token = response.json().get("access_token")
             if access_token:
                 st.session_state["access_token"] = access_token
+                cookie_controller.set("access_token", access_token)
                 st.session_state["logged_in"] = True
                 st.success("Uspešno prijavljeni!")
                 time.sleep(1)
@@ -37,7 +38,7 @@ def login_user(username: str, password: str) -> None:
         st.error(f"Napaka pri povezovanju s strežnikom: {str(e)}")
 
 
-def login_page(navigate_to):
+def login_page(cookie_controller):
     """Renders the login page."""
     st.title("Prijava")
 
@@ -46,4 +47,4 @@ def login_page(navigate_to):
         password = st.text_input("Geslo", type="password")
 
     if st.button("Prijava"):
-        login_user(username, password)
+        login_user(username, password, cookie_controller)
