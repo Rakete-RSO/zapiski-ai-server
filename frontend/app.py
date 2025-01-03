@@ -1,20 +1,19 @@
 # app.py
-import time
 
 import requests
 import streamlit as st
-from config import AUTH_BASE_URL
+from streamlit_cookies_controller import CookieController
 
-from help_pages.home import home_page
+from config import AUTH_BASE_URL
 from help_pages.login import login_page
 from help_pages.registration import register_page
 from help_pages.upload import upload_notes_page
-from streamlit_cookies_controller import CookieController
 
 
 # Function to switch pages
 def navigate_to(page_name):
     st.session_state["current_page"] = page_name
+
 
 def logout_user():
     """Resets the session state to log out the user."""
@@ -26,24 +25,24 @@ def logout_user():
     navigate_to("Nalaganje zapiskov")
     st.rerun()
 
+
 def check_access_token(access_token):
     try:
-        headers = {
-            "Authorization": f"Bearer {access_token}"
-        }
+        headers = {"Authorization": f"Bearer {access_token}"}
         response = requests.get(f"{AUTH_BASE_URL}/verify-token", headers=headers)
 
         if response.status_code == 200:
             return True
         else:
             return False
-    except Exception as e:
+    except Exception:
         return False
+
 
 def main():
     # Initialize session state for login and navigation
     controller = CookieController()
-    access_token = controller.get('access_token')
+    access_token = controller.get("access_token")
     st.session_state["access_token"] = access_token
     if "logged_in" not in st.session_state:
         st.session_state["logged_in"] = check_access_token(access_token)
@@ -66,13 +65,13 @@ def main():
         "Nalaganje zapiskov",
     ]
 
-    if (st.session_state["logged_in"]):
+    if st.session_state["logged_in"]:
         menu = [
             # "Domov",  EDIT (tjaz): za enkrat sem disablal route domov, ter vse preusmerim na Nalaganje zapiskov
             "Prijava",
             "Registracija",
             "Nalaganje zapiskov",
-            "Odjava"
+            "Odjava",
         ]
 
     # Select the menu item

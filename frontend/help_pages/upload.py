@@ -1,7 +1,8 @@
 import requests
 import streamlit as st
-from config import CHAT_BASE_URL
 from streamlit.runtime.uploaded_file_manager import UploadedFile
+
+from config import OPENAI_BASE_URL
 
 
 def upload_notes_page():
@@ -29,7 +30,7 @@ def upload_notes_page():
                     display_file(msg["uploaded_file"])
                 st.markdown(f"**Vi:**\n {msg['content']}")
     else:
-        response = requests.post(f"{CHAT_BASE_URL}/chat", headers=headers)
+        response = requests.post(f"{OPENAI_BASE_URL}/chat", headers=headers)
         if response.status_code == 200:
             chat_id = response.json().get("chat_id")
             if chat_id:
@@ -59,7 +60,7 @@ def upload_notes_page():
                     uploaded_file.type,
                 )
             response = requests.post(
-                f"{CHAT_BASE_URL}/chat/messages",
+                f"{OPENAI_BASE_URL}/chat/messages",
                 headers=headers,
                 files=files,
                 data={

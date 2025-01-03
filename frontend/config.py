@@ -12,6 +12,6 @@ AUTH_BASE_URL = os.getenv(
     "AUTH_BASE_URL", "http://127.0.0.1:8000"
 )  # Default to localhost if not setreadme
 
-CHAT_BASE_URL = os.getenv("CHAT_BASE_URL", "http://127.0.0.1:8001")
+OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "http://127.0.0.1:8001")
 
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
