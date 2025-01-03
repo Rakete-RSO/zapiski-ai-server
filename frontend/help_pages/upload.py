@@ -2,7 +2,7 @@ import requests
 import streamlit as st
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
-from config import OPENAI_BASE_URL
+from config import CHAT_BASE_URL, OPENAI_BASE_URL
 
 
 def upload_notes_page():
@@ -15,7 +15,7 @@ def upload_notes_page():
     chat_id = st.session_state.get("chat_id")
     display_initial_uploaded_file = True
     if chat_id:
-        st.write("Zdaj lahko klepetate s svojim asistentom.")
+        # st.write("Zdaj lahko klepetate s svojim asistentom.")
 
         # Display previous messages
         if "messages" not in st.session_state:
@@ -25,16 +25,18 @@ def upload_notes_page():
             if msg["role"] == "assistant":
                 st.markdown(f"**Asistent:**\n {msg['content']}")
             else:
-                if msg["uploaded_file"]:
+                if "uploaded_file" in msg and msg["uploaded_file"]:
                     display_initial_uploaded_file = False
                     display_file(msg["uploaded_file"])
                 st.markdown(f"**Vi:**\n {msg['content']}")
     else:
-        response = requests.post(f"{OPENAI_BASE_URL}/chat", headers=headers)
+        print("creating new chat-------------")
+        response = requests.post(f"{CHAT_BASE_URL}/chat", headers=headers)
         if response.status_code == 200:
             chat_id = response.json().get("chat_id")
             if chat_id:
                 st.session_state["chat_id"] = chat_id
+                st.session_state["messages"] = []
             else:
                 st.error(
                     "Napaka pri nalaganju zapiskov. Neuspešno pridobivanje chat_id."
