@@ -11,15 +11,17 @@ from help_pages.registration import register_page
 from help_pages.upload import upload_notes_page
 from streamlit_cookies_controller import CookieController
 
-
 # Function to switch pages
 def navigate_to(page_name):
     st.session_state["current_page"] = page_name
 
-def logout_user():
+def logout_user(controller):
     """Resets the session state to log out the user."""
     st.session_state["logged_in"] = False
     st.session_state["access_token"] = None
+
+    controller.remove("access_token")
+
     st.session_state["messages"] = []
     st.session_state["chat_id"] = None
     st.success("Uspešno odjavljeni.")
@@ -97,7 +99,7 @@ def main():
         else:
             register_page(navigate_to)
     elif st.session_state["current_page"] == "Odjava":
-        logout_user()
+        logout_user(controller)
     elif st.session_state["current_page"] == "Nalaganje zapiskov":
         if st.session_state["logged_in"]:
             upload_notes_page()
