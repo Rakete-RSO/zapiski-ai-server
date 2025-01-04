@@ -8,10 +8,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Base URL of the authentication server
-AUTH_BASE_URL = os.getenv(
-    "AUTH_BASE_URL", "http://127.0.0.1:8000"
-)  # Default to localhost if not setreadme
+AUTH_BASE_URL = os.getenv("AUTH_BASE_URL", "")
+if not AUTH_BASE_URL:
+    raise ValueError("AUTH_BASE_URL is not set")
 
-CHAT_BASE_URL = os.getenv("CHAT_BASE_URL", "http://127.0.0.1:8001")
+OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "")
+if not OPENAI_BASE_URL:
+    raise ValueError("OPENAI_BASE_URL is not set")
+
+CHAT_BASE_URL = os.getenv("CHAT_BASE_URL", "")
+if not CHAT_BASE_URL:
+    raise ValueError("CHAT_BASE_URL is not set")
 
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"

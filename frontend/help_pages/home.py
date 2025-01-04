@@ -48,4 +48,3 @@ def home_page(navigate_to):
                     file_name=uploaded_file.name,
                     mime="application/pdf",
                 )
-
