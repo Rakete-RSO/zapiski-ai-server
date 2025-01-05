@@ -30,7 +30,6 @@ def upload_notes_page():
                     display_file(msg["uploaded_file"])
                 st.markdown(f"**Vi:**\n {msg['content']}")
     else:
-        print("creating new chat-------------")
         response = requests.post(f"{CHAT_BASE_URL}/chat", headers=headers)
         if response.status_code == 200:
             chat_id = response.json().get("chat_id")

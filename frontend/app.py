@@ -9,6 +9,9 @@ from help_pages.login import login_page
 from help_pages.registration import register_page
 from help_pages.upload import upload_notes_page
 
+CREATE_NEW_CHAT_BUTTON = "Ustvari nov pogovor"
+
+
 # Function to switch pages
 def navigate_to(page_name):
     st.session_state["current_page"] = page_name
@@ -89,6 +92,8 @@ def main():
     if "previous_selected_chat_id" not in st.session_state:
         st.session_state["previous_selected_chat_id"] = ""
 
+    if "creating_new_chat" not in st.session_state:
+        st.session_state["creating_new_chat"] = False
     # Sidebar navigation menu
     menu = [
         # "Domov",  EDIT (tjaz): za enkrat sem disablal route domov, ter vse preusmerim na Nalaganje zapiskov
@@ -159,17 +164,24 @@ def chat_chooser():
             # Create a list of chat names
             chat_options = list(chat_name_to_id_mapping.keys())
             # Add an option to create a new chat
-            chat_options.append("Ustvari nov Chat")
+            chat_options.append(CREATE_NEW_CHAT_BUTTON)
 
             # Display the selectbox
-            selected_chat = st.sidebar.selectbox("Izberi Chat:", chat_options)
+            selected_chat = st.sidebar.selectbox(
+                "Izberi ali naredi nov pogovor:", chat_options
+            )
 
-            if selected_chat == "Ustvari nov Chat":
+            if (
+                st.session_state["creating_new_chat"]
+                and selected_chat == CREATE_NEW_CHAT_BUTTON
+            ):
+                pass
+            elif selected_chat == CREATE_NEW_CHAT_BUTTON:
                 navigate_to("Nalaganje zapiskov")
                 st.session_state["chat_id"] = None
                 st.session_state["previous_selected_chat_id"] = ""
                 st.session_state["messages"] = []
-                # st.rerun()
+                st.session_state["creating_new_chat"] = True
             else:
                 # Find the selected chat's ID
                 if selected_chat not in chat_name_to_id_mapping:
@@ -184,10 +196,8 @@ def chat_chooser():
                         st.session_state["access_token"], current_chat_id
                     )
                     st.session_state["messages"] = chat_messages["messages"]  # type: ignore
-
-                    # st.rerun()
         else:
-            st.sidebar.write("Ni najdenih chat-ov.")
+            st.sidebar.write("Ni prejšnjih pogovorov.")
 
 
 if __name__ == "__main__":
