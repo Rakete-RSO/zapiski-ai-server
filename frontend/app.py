@@ -16,6 +16,7 @@ CREATE_NEW_CHAT_BUTTON = "Ustvari nov pogovor"
 def navigate_to(page_name):
     st.session_state["current_page"] = page_name
 
+
 def logout_user(controller):
     """Resets the session state to log out the user."""
     st.session_state["logged_in"] = False
@@ -150,7 +151,6 @@ def chat_chooser():
 
         # Fetch chats only once and store them in session state
         if "chats" not in st.session_state:
-            st.write("Fetching chats...")
             chats = fetch_chats(st.session_state["access_token"])
             st.session_state["chats"] = chats
         else:
