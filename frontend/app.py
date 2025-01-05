@@ -147,7 +147,7 @@ def main():
 
 def chat_chooser():
     if st.session_state["logged_in"]:
-        st.sidebar.markdown("## Vaši Chat-i")
+        st.sidebar.markdown("## Vaši pogovori")
 
         # Fetch chats only once and store them in session state
         if "chats" not in st.session_state:
@@ -196,6 +196,7 @@ def chat_chooser():
                         st.session_state["access_token"], current_chat_id
                     )
                     st.session_state["messages"] = chat_messages["messages"]  # type: ignore
+                    st.session_state["creating_new_chat"] = False
         else:
             st.sidebar.write("Ni prejšnjih pogovorov.")
 

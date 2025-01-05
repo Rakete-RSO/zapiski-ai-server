@@ -20,4 +20,8 @@ CHAT_BASE_URL = os.getenv("CHAT_BASE_URL", "")
 if not CHAT_BASE_URL:
     raise ValueError("CHAT_BASE_URL is not set")
 
+DOCUMENT_BASE_URL = os.getenv("DOCUMENT_BASE_URL", "")
+if not DOCUMENT_BASE_URL:
+    raise ValueError("DOCUMENT_BASE_URL is not set")
+
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
