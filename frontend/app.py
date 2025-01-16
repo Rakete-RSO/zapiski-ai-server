@@ -8,6 +8,7 @@ from config import AUTH_BASE_URL, CHAT_BASE_URL
 from help_pages.login import login_page
 from help_pages.registration import register_page
 from help_pages.upload import upload_notes_page
+from help_pages.account_page import account_page
 
 CREATE_NEW_CHAT_BUTTON = "Ustvari nov pogovor"
 
@@ -21,6 +22,7 @@ def logout_user(controller):
     """Resets the session state to log out the user."""
     st.session_state["logged_in"] = False
     st.session_state["access_token"] = None
+
 
     controller.remove("access_token")
 
@@ -109,6 +111,7 @@ def main():
             "Prijava",
             "Registracija",
             "Nalaganje zapiskov",
+            "Moj Račun",
             "Odjava",
         ]
 
@@ -135,6 +138,12 @@ def main():
             upload_notes_page()
         else:
             register_page(navigate_to)
+    elif st.session_state["current_page"] == "Moj Račun":
+        if st.session_state["logged_in"]:
+            account_page()
+        else:
+            st.warning("Prosimo, prijavite se za dostop do te strani.")
+            login_page(controller)
     elif st.session_state["current_page"] == "Odjava":
         logout_user(controller)
     elif st.session_state["current_page"] == "Nalaganje zapiskov":
