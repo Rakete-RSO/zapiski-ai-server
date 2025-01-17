@@ -5,10 +5,10 @@ import streamlit as st
 from streamlit_cookies_controller import CookieController
 
 from config import AUTH_BASE_URL, CHAT_BASE_URL
+from help_pages.account_page import account_page
 from help_pages.login import login_page
 from help_pages.registration import register_page
 from help_pages.upload import upload_notes_page
-from help_pages.account_page import account_page
 
 CREATE_NEW_CHAT_BUTTON = "Ustvari nov pogovor"
 
@@ -22,7 +22,6 @@ def logout_user(controller):
     """Resets the session state to log out the user."""
     st.session_state["logged_in"] = False
     st.session_state["access_token"] = None
-
 
     controller.remove("access_token")
 
@@ -47,16 +46,40 @@ def check_access_token(access_token):
 
 
 def fetch_chats(access_token):
-    headers = {"Authorization": f"Bearer {access_token}"}
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json",
+    }
+    query = (
+        """
+    query {
+        listChats(accessToken: "%s") {
+            id
+            name
+        }
+    }
+    """
+        % access_token
+    )  # Embed the access token in the query
+
     try:
-        response = requests.get(f"{CHAT_BASE_URL}/chat", headers=headers)
+        response = requests.post(
+            f"{CHAT_BASE_URL}/graphql", json={"query": query}, headers=headers
+        )
         if response.status_code == 200:
-            return response.json()  # Expecting a list of chats
+            data = response.json()
+            if "errors" in data:
+                # Handle GraphQL errors
+                print(f"GraphQL errors: {data['errors']}")
+                return []
+            return data.get("data", {}).get(
+                "listChats", []
+            )  # Extract the list of chats
         else:
-            st.error(f"Failed to fetch chats: {response.status_code} - {response.text}")
+            print(f"Failed to fetch chats: {response.status_code} - {response.text}")
             return []
     except Exception as e:
-        st.error(f"An error occurred while fetching chats: {e}")
+        print(f"An error occurred while fetching chats: {e}")
         return []
 
 
