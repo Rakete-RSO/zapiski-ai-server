@@ -4,6 +4,26 @@ from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 from config import CHAT_BASE_URL, DOCUMENT_BASE_URL, OPENAI_BASE_URL
 
+def fetch_chatgpt_version(headers):
+    """
+    Fetch the version of ChatGPT being used via the GraphQL API.
+    """
+    query = """
+    query {
+      getChatgptVersion
+    }
+    """
+    response = requests.post(
+        f"{OPENAI_BASE_URL}/graphql",
+        json={"query": query},
+        headers=headers,
+    )
+    if response.status_code == 200:
+        data = response.json()
+        return data.get("data", {}).get("getChatgptVersion", "Unknown")
+    else:
+        return "Napaka pri pridobivanju verzije"
+
 
 def upload_notes_page():
     st.title("Naloži zapiske")
@@ -13,6 +33,10 @@ def upload_notes_page():
     )
     headers = {"Authorization": f"Bearer {st.session_state['access_token']}"}
     chat_id = st.session_state.get("chat_id")
+
+    chatgpt_version = fetch_chatgpt_version(headers)
+    st.sidebar.markdown(f"### ChatGPT Verzija: {chatgpt_version}")
+
     display_initial_uploaded_file = True
     if chat_id:
         # Display previous messages
